@@ -69,3 +69,14 @@ db.users.find({age:{$exists:true}}).pretty()
 
 db.users.find({age:{$exists:false}}).pretty()
 db.users.find({age:{$exists:true,$ne:null}}).pretty()
+
+// $type operator
+db.users.find({phone:{$type:"string"}}).pretty()
+db.users.find({phone:{$type:"number"}}).pretty()
+
+// Integer로 저장한다고 해도 javascript는 double로 인지한다?
+// 이건 나중에 다시 알아보도록 하자.
+db.users.find({phone:{$type:"double"}}).pretty()
+
+// 이렇게 array로 지정할 수도 있다. 둘 중 하나만 속해도 return 함.
+db.users.find({phone:{$type:["double","string"]}}).pretty()
