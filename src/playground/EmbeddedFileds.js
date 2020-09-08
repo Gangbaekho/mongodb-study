@@ -15,3 +15,9 @@ db.movies.find({runtime:{$in:[30,42]}}).pretty()
 
 // array 안에 없는것만 찾는다.
 db.movies.find({runtime:{$nin:[30,42]}}).pretty()
+
+// $or:[] array안에다가 여러가지 filter를 넣어주면 된다는 것이다.
+db.movies.find({$or:[{"rating.average":{$lt:5}},{"rating.average":{$gt:9.3}}]}).pretty()
+
+// 5보다 작지 안거나 9.3보다 크지 않거나.
+db.movies.find({$nor:[{"rating.average":{$lt:5}},{"rating.average":{$gt:9.3}}]}).pretty()
