@@ -31,3 +31,13 @@ db.movies.find({"rating.average":{$gt:9},genres:"Drama"}).count()
 // 밑에 있는 것은 사실 Horror가 있는 것을 찾는다. 왜냐면 Overried 되기 때문에 앞에 조건은 무시가 되기 떄문이다.
 db.movies.find({genres:"Drama",genres:"Horror"}).count()
 db.movies.find({$and:[{genres:"Drama"},{genres:"Horror"}]}).count()
+
+// 이걸 해보면은 not이 먹히는지 안먹히는지 알 수 없다.
+db.movies.find({runtime:{$not:{$eq:60}}}).count()
+db.movies.find({runtime:60}).count()
+db.movies.find().count()
+
+// 하지만 $not은 자주 쓰는 operator는 아니다.
+// 아래의 두개는 동일한 것이기 때문에 위에것을 선호한다.
+db.movies.find({runtime:{$ne:60}}).count()
+db.movies.find({runtime:{$not:{$eq:60}}}).count()
