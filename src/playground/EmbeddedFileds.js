@@ -41,3 +41,31 @@ db.movies.find().count()
 // 아래의 두개는 동일한 것이기 때문에 위에것을 선호한다.
 db.movies.find({runtime:{$ne:60}}).count()
 db.movies.find({runtime:{$not:{$eq:60}}}).count()
+
+// Diving into Element operators
+db.users.insertMany([
+    {
+        name:"Max",
+        hobbies:[{title:"Sports",frequency:3},{title:"Cooking",frequency:6}],
+        phone:1234124
+    },
+    {
+        name:"Manuel",
+        hobbies:[{title:"Cooking",frequency:5},{title:"Cars",frequency:2}],
+        phone:"01824124",
+        age:30
+    }
+])
+
+// find users who has phone field.
+db.users.find({age:{$exists:true}}).pretty()
+db.users.find({age:{$exists:true,$gt:30}}).pretty()
+
+db.users.insertOne({name:"Anna",hobbies:[{title:"Sports",frequency:2},{title:"Yoga",frequency:3}],
+phone:"124812512",age:null})
+
+db.users.find().pretty()
+db.users.find({age:{$exists:true}}).pretty()
+
+db.users.find({age:{$exists:false}}).pretty()
+db.users.find({age:{$exists:true,$ne:null}}).pretty()
