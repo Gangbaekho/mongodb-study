@@ -26,9 +26,19 @@ db.hobbies.insertMany([
         _id:"hiking",
         name:"Hiking"
     }
-])
+],{
+    ordered:false
+})
 
 db.hobbies.insertMany([
+    {
+        _id:"test",
+        name:"Test"
+    },
+    {
+        _id:"drawing",
+        name:"Drawing"
+    },
     {
         _id:"reading",
         name:"Reading books"
