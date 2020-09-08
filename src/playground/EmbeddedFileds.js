@@ -86,3 +86,13 @@ db.users.find({phone:{$type:["double","string"]}}).pretty()
 // 있는 애를 찾아보도록 한다.
 // 특정 문자열을 찾는데는 좋을 수 있으나, 효율적이지 않다는 문제점이 있다.
 db.movies.find({summary:{$regex:/musical/}}).pretty()
+
+// $expr(expression?)
+db.sales.insertMany([{volume:100,target:120},{volume:89,target:80},{volume:200,target:177}])
+
+// volume > target 을 찾는 것임.
+db.sales.find({$expr:{$gt:["$volume","$target"]}}).pretty()
+
+
+db.sales.find({$expr:{$gt:[{$cond:{if:{$gte:["$volume",190]},then:{substract:["$volume",10]},else:"volume"}}, "$target"]}}).pretty()
+
