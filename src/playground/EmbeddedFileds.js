@@ -21,3 +21,13 @@ db.movies.find({$or:[{"rating.average":{$lt:5}},{"rating.average":{$gt:9.3}}]}).
 
 // 5보다 작지 안거나 9.3보다 크지 않거나.
 db.movies.find({$nor:[{"rating.average":{$lt:5}},{"rating.average":{$gt:9.3}}]}).pretty()
+
+// 두개는 동일하니까 간단한 밑에껄로 하자.
+db.movies.find({$and:[{"rating.average":{$gt:9}},{genres:"Drama"}]}).count()
+db.movies.find({"rating.average":{$gt:9},genres:"Drama"}).count()
+
+// 두 개의 결과는 다르다. 그러니까 즉, 같은 field에서 조건을 걸떄는 and를 써야 할 떄도 있다는 것이다.
+// 위에있는 것은 Drama Horror 둘 중 하나만 있는것을 찾는거고
+// 밑에 있는 것은 사실 Horror가 있는 것을 찾는다. 왜냐면 Overried 되기 때문에 앞에 조건은 무시가 되기 떄문이다.
+db.movies.find({genres:"Drama",genres:"Horror"}).count()
+db.movies.find({$and:[{genres:"Drama"},{genres:"Horror"}]}).count()
