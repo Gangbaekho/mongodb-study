@@ -9,3 +9,9 @@ db.movies.find({genres:"Drama"})
 // 하지만 이렇게 array를 통해서 정의를 해주면은
 // Drama 하나만 있는것을 찾게 된다.
 db.movies.find({genres:["Drama"]})
+
+// array 안에 있는것만 찾는다.
+db.movies.find({runtime:{$in:[30,42]}}).pretty() 
+
+// array 안에 없는것만 찾는다.
+db.movies.find({runtime:{$nin:[30,42]}}).pretty()
