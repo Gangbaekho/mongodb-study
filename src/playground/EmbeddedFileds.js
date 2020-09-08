@@ -80,3 +80,9 @@ db.users.find({phone:{$type:"double"}}).pretty()
 
 // 이렇게 array로 지정할 수도 있다. 둘 중 하나만 속해도 return 함.
 db.users.find({phone:{$type:["double","string"]}}).pretty()
+
+// $regex(regular-expressions)
+// regular expression은 꽤나 복잡한데 여기에서는 summary라는 text 안에 musical이
+// 있는 애를 찾아보도록 한다.
+// 특정 문자열을 찾는데는 좋을 수 있으나, 효율적이지 않다는 문제점이 있다.
+db.movies.find({summary:{$regex:/musical/}}).pretty()
