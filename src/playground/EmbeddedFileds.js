@@ -107,3 +107,13 @@ db.users.find({hobbies:{title:"Sports",frequency:2}}).pretty()
 
 // 즉, 정리하자면 hobbies가 array를 가지고 있어도 title에 이렇게 접근 가능하다는 것을 알면 된다.
 db.users.find({"hobbies.title": "Sports"}).pretty()
+
+db.users.insertOne({
+    name:"Chris",
+    hobbies:["Sports","Cooking","Hiking"]
+})
+
+// 이런식으로 size의 숫자를 직접 정해줄 수 있다.
+// 하지만 한가지 유의해야 할 점은 size > 2 이런식으로 
+// 쓰는 것은 불가능 하다. 꼭 정확한 숫자로 정해져야 한다는 것이다.
+db.users.find({hobbies:{$size:3}}).pretty()
