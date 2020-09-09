@@ -33,6 +33,17 @@ db.movies.find().sort({"rating.average":1, runtime:-1}).skip(100).limit(10)
 // 이건 그냥 팁인데, 굳이 순서를 맞추지 않아도 
 // mongoserver 에서는 sort먼저하고 skip 하고 limit을 수행한다.
 db.movies.find().skip(100).limit(10).sort({"rating.average":1, runtime:-1})
- 
+
+// projection에 대해서 알아볼건데, 알다싶이 movie 데이터는 좀 heavy하다
+// movie 데이터에 있는 모든 field 가 필요하지 않다면 애초부터 필요한
+// 데이터만 필터링해서 주는것이 바람직 할 텐데, 이것이 바로 projection 이라고 할 수 있다.
+// find의 첫번째 파라미터에 조건을 주고, 두번째 파라미터에 원하는 field를 1로 표시하면 되는데,
+// 한가지 예외로, _id 값은 default가 1이기 때문에 필요없다면 0으로 처리하면 된다.
+db.movies.find({},{name:1,genres:1,runtime:1,rating:1}).pretty() 
+db.movies.find({},{name:1,genres:1,runtime:1,rating:1,_id:0}).pretty()
+
+// embedded document 라 하더라도 원하는 값만 뽑아낼 수 있다.
+db.movies.find({},{name:1,genres:1,runtime:1,"rating.average":1,_id:0}).pretty()
+
 
 
