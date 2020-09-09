@@ -153,3 +153,13 @@ db.moviestarts.find({genre:["action","thriller"]}).pretty()
 // 찾게 된다. 물론 action, thriller 가 있고 추가로 다른 것도 있는
 // 것도 같이 뽑힌다.
 db.moviesstars.find({genre:{$all:["action","thriller"]}}).pretty()
+
+// hobbies array안에 있는 객체의 title이 Sports 임과 동시에
+// 객체의 frequency가 2보다 같거나 높은 것을 찾게 될 것이라고 예상하지만 
+// 결과는 그렇지 않다.
+// 이해는 잘 같지 않지만, 저 두개의 조건이 같은 document에서 일어나지
+// 않는 것이 문제이다.
+db.users.find({$and:[{"hobbies.title":"Sports"},{"hobbies.frequency":{$gte:2}}]}).pretty()
+
+// 그러면 같은 document에서 조건을 걸려면 어떻게 해야 할까
+db.users.find({hobbies:{$elemMatch:{title:"Sports",frequency:{$gte:3}}}}).pretty()
