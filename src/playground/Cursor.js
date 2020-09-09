@@ -45,5 +45,10 @@ db.movies.find({},{name:1,genres:1,runtime:1,rating:1,_id:0}).pretty()
 // embedded document 라 하더라도 원하는 값만 뽑아낼 수 있다.
 db.movies.find({},{name:1,genres:1,runtime:1,"rating.average":1,_id:0}).pretty()
 
+// 앞에 조건에 속하는 document 중 genres array에서는 두개만 꺼내오고
+// 이름과 함께 projection 한다라는 그런 의미이다.
+// 뭐 slice가 자른다는 그런 의미니까 array에서 쓴다 정도만 기억하면 될듯.
+db.movies.find({"rating.average":{$gt:9}},{genres:{$slice:2},name:1}).pretty()
 
-
+// 이건 genres array에서 첫번째꺼를 뺴고 2개를 가져온다는 의미임.
+db.movies.find({"rating.average":{$gt:9}},{genres:{$slice:[1,2]},name:1}).pretty()
