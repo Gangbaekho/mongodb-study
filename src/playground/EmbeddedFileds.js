@@ -117,3 +117,39 @@ db.users.insertOne({
 // 하지만 한가지 유의해야 할 점은 size > 2 이런식으로 
 // 쓰는 것은 불가능 하다. 꼭 정확한 숫자로 정해져야 한다는 것이다.
 db.users.find({hobbies:{$size:3}}).pretty()
+
+db.moviestart.insertMany([
+    {
+        name:"Titanic",
+        genre:[
+            "action",
+            "thriller"
+        ]
+    },
+    {
+        name:"Juon",
+        genre:[
+            "action",
+            "thriller",
+            "horror"
+        ]
+    }
+])
+
+db.moviestart.insertOne({
+    name:"Inception",
+    genre:[
+        "thriller",
+        "action"
+    ]
+})
+
+// 이렇게 하면은 genre가 action, thriller 순서에 맞게 있는 것만 
+// 뽑아내게 된다는 것이다. 하지만 순서는 상관 없다고 할때는
+// 어떤 쿼리를 작성해야 할까
+db.moviestarts.find({genre:["action","thriller"]}).pretty()
+
+// 이렇게 하면은 genre에 action과 thriller가 포함된 모든 것을 
+// 찾게 된다. 물론 action, thriller 가 있고 추가로 다른 것도 있는
+// 것도 같이 뽑힌다.
+db.moviesstars.find({genre:{$all:["action","thriller"]}}).pretty()
