@@ -22,3 +22,17 @@ db.movies.find().sort({"rating.average":-1}).pretty()
 // 이렇게 하면 order by 를 여러개로 줄 수 있다는 것이다.
 db.movies.find().sort({"rating.average":1,runtime:-1}).pretty()
 
+// 앞에 100개는 생략하고 result를 던져준다는 얘기임
+db.movies.find().sort({"rating.average":1, runtime:-1}).skip(100).count()
+
+// 100개를 생략하고 그 다음 10개만 추려낸다는 것임.
+// 이렇게 하면은 pagenation을 할때 offset과 limit
+// 의 의미와 같다는 것을 알 수 있다. 그런식으로 사용하면 됨.
+db.movies.find().sort({"rating.average":1, runtime:-1}).skip(100).limit(10)
+
+// 이건 그냥 팁인데, 굳이 순서를 맞추지 않아도 
+// mongoserver 에서는 sort먼저하고 skip 하고 limit을 수행한다.
+db.movies.find().skip(100).limit(10).sort({"rating.average":1, runtime:-1})
+ 
+
+
