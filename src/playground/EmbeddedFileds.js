@@ -96,3 +96,14 @@ db.sales.find({$expr:{$gt:["$volume","$target"]}}).pretty()
 
 db.sales.find({$expr:{$gt:[{$cond:{if:{$gte:["$volume",190]},then:{substract:["$volume",10]},else:"volume"}}, "$target"]}}).pretty()
 
+// 이렇게 하면은 hobbies array에 해당 document가 존재하면은 그게 출력이 된다.
+// 하지만 frequency 까지 하고 싶은게 아니라 Sports만 있는 것들을 찾고 싶으면 어떻게 해야 할까?
+// 결과는 2개
+db.users.find({hobbies:{title:"Sports",frequency:2}}).pretty()
+
+// 비록 hobbies는 array라서 직접 title을 가지고 있는 형태는 아니지만,
+// 아래와 같은 쿼리를 작성 할 수 있다는 것이다.
+// 결과는 3개로 나왔음을 확인 할 수 있다.
+
+// 즉, 정리하자면 hobbies가 array를 가지고 있어도 title에 이렇게 접근 가능하다는 것을 알면 된다.
+db.users.find({"hobbies.title": "Sports"}).pretty()
