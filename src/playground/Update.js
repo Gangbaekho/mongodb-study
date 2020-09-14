@@ -9,3 +9,7 @@ db.users.updateOne({_id:ObjectId("5f584d0ad1736122b238c313")},{$set:{hobbies:[{t
 db.users.find({"hobbies.title":"Sports"}).pretty()
 
 db.users.updateMany({"hobbies.title":"Sports"},{$set:{isSporty:true}})
+
+// 이번꺼는 여러개의 field를 바꾸는 건데, set 안에 document가 들어간다고 생각하면은
+// 뭐 특이한 사항은 아닌것 같다.
+db.users.updateOne({_id:ObjectId("5f584d0ad1736122b238c313")},{$set:{age: 40, phone:125125812}})
