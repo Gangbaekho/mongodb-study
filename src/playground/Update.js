@@ -1,0 +1,11 @@
+// {$set:{}} set 안에는 document가 들어간다고 생각하면 된다.
+// 이것은 오버라이드 하는 특징이 있다는 것도 알아둬야 한다.
+db.users.updateOne({_id:ObjectId("5f584d0ad1736122b238c313")},{$set:{hobbies:[{title:"Sports",frequency:5},{title:"Cooking",frequency:3},{title:"Hiking",frequency:1}]}})
+
+// 이 결과로는 matchedCount 와 modifiedCount 라는 것이 있는데,
+// matchedCount는 filter로 찾은 갯수를 의미하는 거고 modifiedCount는 변화된 것을 의미한다.
+// 그런데 변화된게 없으면은 Mongodb에서는 해당 쿼리를 무시하는 것도 알아두자.
+
+db.users.find({"hobbies.title":"Sports"}).pretty()
+
+db.users.updateMany({"hobbies.title":"Sports"},{$set:{isSporty:true}})
