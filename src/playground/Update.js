@@ -43,3 +43,9 @@ isSporty:true}})
 // 왜냐면 filter를 그것으로 줬으니까 그 field는 있어야 당연한 것이기 떄문이다.
 db.users.updateOne({name:"Maria"},{$set:{age:29,hobbies:[{title:"Good food",frequency:3}],
 isSporty:true}},{upsert:true})
+
+db.users.find({hobbies:{$elemMatch:{title:"Sports",frequency:{$gte:2}}}}).pretty()
+
+// hobbies의 document 중 sports이고 2이상인 것을 찾아서 그 hobbies의 document를 저렇게 세팅 하라는 것임.
+// 중요한것은 가장 바깥의 document가 아니라 hobbies의 document를 수정하는 차이가 있다는 것이다.
+db.users.updateMany({hobbies:{$elemMatch:{title:"Sports",frequency:{$gte:2}}}},{$set:{"hobbies.$.highFrequency":true}})
