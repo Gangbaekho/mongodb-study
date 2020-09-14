@@ -84,3 +84,12 @@ db.users.updateOne({name:"Maria"},{$push:{hobbies:{title:"Sports",frequency:2}}}
 
 // 이런식으로 each를 쓰면은 여러개의 Data를 insert 할 수 있다는 것이다.
 db.users.updateOne({name:"Maria"},{$push:{hobbies:{$each:[{title:"Good Wine",frequency:1},{title:"Hiking",frqeuency:2}],$sort:{frequency:-1}}}})
+
+// 원하는 array안에다가 일종의 filter를 넣어주면 된다는 것이다.
+db.users.updateOne({name:"Maria"},{$pull:{hobbies:{title:"Hiking"}}})
+
+// pop은 하나를 꺼낸다는 그런 의미임으로, 1을 하면은 맨 마지막것을 의미
+db.users.updateOne({name:"Chris"},{$pop:{hobbies:1}})
+
+// 맨 앞에것을 의미.
+db.users.updateOne({name:"Chris"},{$pop:{hobbies:-1}})
