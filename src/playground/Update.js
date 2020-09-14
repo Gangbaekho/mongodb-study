@@ -61,3 +61,15 @@ db.users.updateMany({"hobbies.frequency":{$gt:2}},{$set:{"hobbies.$.goodFrequenc
 // 이렇게 하면은 totalAge가 30 초과인 document 중 hobbies의 Array의 모든 frequency를 -1 한다는
 // 그런 의미이다.
 db.users.updateMany({totalAge:{$gt:30}},{$inc:{"hobbies.$[].frequency":-1}})
+
+// 이렇게 하면 알다싶이 하나만 만족하더라도 그 document는 뽑히게 된다.
+db.users.find({"hobbies.frequency":{$gt:2}}).pretty()
+
+// 첫번째 filter에서는 frequency가 2보다 큰게 하나라도 있으면
+// 그 document가 뽑히는 것이고 두번쨰 parameter는 set 해주는 것,
+// 세번째 parameter는 el이라고 하는 것을 우리가 명명해주고,
+// 그 el은 하나의 hobbies의 document가 된다고 생각하는 것이다.
+// 즉 그 중에서 frequency가 2보다 큰것만 바꾼다는 것이다.
+db.users.updateMany({"hobbies.frequency":{$gt:2}},
+{$set:{"hobbies.$[el].goodFrequency":true}},
+{arrayFilters:[{"el.frequency":{$gt:2}}]})
