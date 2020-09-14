@@ -32,3 +32,14 @@ db.users.updateMany({isSporty:true},{$unset:{phone:""}})
 
 // field를 rename 하는 방법이다.
 db.users.updateMany({},{$rename:{age:"totalAge"}})
+
+// 일부러 없는 Maria를 찾은 것이다. 이렇게 하면은 업데이트 되는 것이 없다.
+// 애초에 matchedCount : 0 이기 떄문이다.
+db.users.updateOne({name:"Maria"},{$set:{age:29,hobbies:[{title:"Good food",frequency:3}],
+isSporty:true}})
+
+// 이렇게 되면은 Maria가 있으면 update 치고 없으면은 insert 치게 되는 것이다.
+// 신기한건 name:Maria 까지 insert 된다. 어떻게 보면은 똑똑하게 insert를 한것이다.
+// 왜냐면 filter를 그것으로 줬으니까 그 field는 있어야 당연한 것이기 떄문이다.
+db.users.updateOne({name:"Maria"},{$set:{age:29,hobbies:[{title:"Good food",frequency:3}],
+isSporty:true}},{upsert:true})
