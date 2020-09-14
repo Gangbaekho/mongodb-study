@@ -73,3 +73,14 @@ db.users.find({"hobbies.frequency":{$gt:2}}).pretty()
 db.users.updateMany({"hobbies.frequency":{$gt:2}},
 {$set:{"hobbies.$[el].goodFrequency":true}},
 {arrayFilters:[{"el.frequency":{$gt:2}}]})
+
+// 이렇게 해버리면은 기존에 있던 elements들은 오버라이딩
+// 되기 때문에 우리가 원하는 것이 아니다.
+db.users.updateOne({name:"Maria"},{$set:{hobbies:[{title:"test",frequency:3}]}})
+
+// 그럴떈 push라는 operator를 써가지고 추가해 넣는 방식을
+// 쓰면은 된다.
+db.users.updateOne({name:"Maria"},{$push:{hobbies:{title:"Sports",frequency:2}}})
+
+// 이런식으로 each를 쓰면은 여러개의 Data를 insert 할 수 있다는 것이다.
+db.users.updateOne({name:"Maria"},{$push:{hobbies:{$each:[{title:"Good Wine",frequency:1},{title:"Hiking",frqeuency:2}],$sort:{frequency:-1}}}})
