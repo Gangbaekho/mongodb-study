@@ -93,3 +93,8 @@ db.users.updateOne({name:"Chris"},{$pop:{hobbies:1}})
 
 // 맨 앞에것을 의미.
 db.users.updateOne({name:"Chris"},{$pop:{hobbies:-1}})
+
+// $push랑 비슷하게 추가를 하는건데 
+// 차이점이 있다면 이름에서 보다 싶이 이건 중복된
+// 데이터는 저장하지 않는다 라는 그런 특징이 있다.
+db.users.updateOne({name:"Maria"},{$addToSet:{hobbies:{title:"Hiking",frequency:2}}})
