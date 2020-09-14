@@ -29,3 +29,6 @@ db.users.updateMany({isSporty:true},{$set:{phone:null}})
 
 // 이렇게 하면은 phone이라는 field 자체가 없어진다.
 db.users.updateMany({isSporty:true},{$unset:{phone:""}})
+
+// field를 rename 하는 방법이다.
+db.users.updateMany({},{$rename:{age:"totalAge"}})
