@@ -28,3 +28,5 @@ db.contacts.explain().find({"dob.age": 35, gender:"male"})
 db.contacts.explain().find({"dob.age":35})
 
 db.contacts.explain().find({gender:"male"})
+
+db.contacts.explain().find({"dob.age":35}).sort({gender:1})
