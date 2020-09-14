@@ -23,3 +23,4 @@ db.users.updateOne({name:"Manuel"},{$inc:{age:-1}})
 // 이런식으로 하면 age를 -1하고 다른 field를 update 할 수 도 있다는 것이다.
 db.users.updateOne({name:"Manuel"},{$inc:{age:-1},$set:{isSporty:false}})
 
+
