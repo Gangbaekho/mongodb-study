@@ -13,3 +13,13 @@ db.users.updateMany({"hobbies.title":"Sports"},{$set:{isSporty:true}})
 // 이번꺼는 여러개의 field를 바꾸는 건데, set 안에 document가 들어간다고 생각하면은
 // 뭐 특이한 사항은 아닌것 같다.
 db.users.updateOne({_id:ObjectId("5f584d0ad1736122b238c313")},{$set:{age: 40, phone:125125812}})
+
+// age를 2만큼 올리라는 그런 의미이다.
+db.users.updateOne({name:"Manuel"},{$inc:{age:2}})
+
+// 이렇게 하면 마이너스가 되겠찌
+db.users.updateOne({name:"Manuel"},{$inc:{age:-1}})
+
+// 이런식으로 하면 age를 -1하고 다른 field를 update 할 수 도 있다는 것이다.
+db.users.updateOne({name:"Manuel"},{$inc:{age:-1},$set:{isSporty:false}})
+
