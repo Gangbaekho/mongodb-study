@@ -23,4 +23,9 @@ db.users.updateOne({name:"Manuel"},{$inc:{age:-1}})
 // 이런식으로 하면 age를 -1하고 다른 field를 update 할 수 도 있다는 것이다.
 db.users.updateOne({name:"Manuel"},{$inc:{age:-1},$set:{isSporty:false}})
 
+// 이렇게 하면은 phone이 null로 되겠지만, field 자체를
+// 없애고 싶은 우리의 목적은 아니라는 것이다.
+db.users.updateMany({isSporty:true},{$set:{phone:null}})
 
+// 이렇게 하면은 phone이라는 field 자체가 없어진다.
+db.users.updateMany({isSporty:true},{$unset:{phone:""}})
