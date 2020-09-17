@@ -70,3 +70,23 @@ db.users.insertOne({name:"jinsoo"})
 // 그럴 떄는 email이 있는 것만 Index에 추가 하도록 해야 한다는 것이다.
 // 뭐 생각하면 당연한 듯 하다. 이런식으로 partial index를 이용하면 된다.
 db.users.createIndex({email:1},{unique:true,partialFilterExpression:{email:{$exists:true}}})
+
+db.sessions.insertOne({data:"asfqw",createdAt:new Date()})
+
+// expireAfterSconds 의 의미는 이 이후에 데이터는
+// 모두 사라진다는 것을 의미한다.
+// date object에만 이 조건을 걸 수 있고, 하나의 field에만
+// index를 걸어야 한다 이것을 time-to-live index라고 부른다.
+db.sessions.createIndex({createdAt:1},{expireAfterSeconds:10})
+
+// 10초 후에 하면은 데이터가 사라져 있다는 것을 알 수 있다.
+// 이는 session에 관련해서 사용하면 꿀이다.
+db.sessions.find().pretty()
+
+
+
+
+
+
+
+
