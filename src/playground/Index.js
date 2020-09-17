@@ -83,6 +83,23 @@ db.sessions.createIndex({createdAt:1},{expireAfterSeconds:10})
 // 이는 session에 관련해서 사용하면 꿀이다.
 db.sessions.find().pretty()
 
+db.customers.insertManu([{name:"Max",age:29,salary:3000},{name:"Many",age:30,salary:4000}])
+
+db.customers.createIndex({name:1})
+
+// 이렇게 하면은 executionStats안에 있는 totalDocsExamined가 1이 된다.
+// 이 말은 즉, pointer를 통해서 name이 Max인 document에 접근을 했다는 소리이다.
+// 여기서 포인트로 집고자 하는 것은 Index는 단순히 포인터 기능만 있는게 아니다.
+// name으로 Index를 만들었기 때문에 Index는 name이라는 value 또한 가지고 있는 것이다.
+db.customers.explain("executionStats").find({name:"Max"})
+
+// 이렇게 쿼리를 작성해주면은 결국 원하는건 name이기 떄문에
+// Index 만으로도 그 결과를 찾을 수 있기 때문에 즉, document를
+// pointer를 통해서 뒤지지 않아도 된다는 소리이고 그렇기 때문에
+// totalDocsExamined가 0이 된다라는 그런 말이다
+// Index에서 cover 할 수 있기 떄문에 covered query라고 하는 것이다.
+db.customers.explain("executionStats").find({name:"Max"},{_id:0,name:1})
+
 
 
 
