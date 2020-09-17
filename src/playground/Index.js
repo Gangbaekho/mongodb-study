@@ -55,3 +55,18 @@ db.contacts.explain().find({"dob.age":{$gt:60},gender:"male"})
 
 // 이런식으로도 사용 가능하다는 것이다.
 db.contacts.createIndex({"dob.age":1},{partialFilterExpression: {"dob.age":{$gt:60}}})
+
+db.users.insertMany([{name:"Max",email:"max@test.com"},{name:"Manu"}])
+
+db.users.createIndex({email:1},{unique:true})
+
+// 이렇게 하면은 Error가 난다.
+// email Index에서 이미 Manu라는 애가 email 값이 없는 걸로 Ordering 되어있고,
+// 위에서 email을 unique로 하였기 때문에, jinsoo 또한 email이 없다.
+// 그렇기 때문에 unique에서 오류가 나는 것이다. 값이 없는게 두개 이기 때문에 
+// 중복이라고 Mongodb에서는 판단하기 떄문이다.
+db.users.insertOne({name:"jinsoo"})
+
+// 그럴 떄는 email이 있는 것만 Index에 추가 하도록 해야 한다는 것이다.
+// 뭐 생각하면 당연한 듯 하다. 이런식으로 partial index를 이용하면 된다.
+db.users.createIndex({email:1},{unique:true,partialFilterExpression:{email:{$exists:true}}})
