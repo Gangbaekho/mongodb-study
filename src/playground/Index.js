@@ -113,6 +113,40 @@ db.customers.createIndex({age:1,name:1})
 // 그 Index는 reject 되었다는 그런 얘기이다.
 db.customers.explain().find({name:"Max",age:30})
 
+db.contacts.insertOne({name:"Max",hobbies:["Cooking","Sports"],
+addresses:[{street:"Main Street"},{street:"Second Street"}]})
+
+// 이전과 다른점은 Index에 단일 값이 아닌
+// array를 걸었다는 것인데 mongodb에서는 이게 가능하다.
+// 하지만 array가 아닌 index에 비해서는 많은 데이터를 Index에
+// 저장해야 하는 단점이 있긴 하지만, 그렇다고 쓰면 안되는 것은 아니다.
+// 이런것을 multi-key index 라고 부른다.
+db.contacts.createIndex({hobbies:1})
+
+db.contacts.explain().find({hobbies:"Sports"})
+
+db.contacts.createIndex({addresses:1})
+
+// 이렇게 하면 full scan을 한다 예상하다 싶이
+// index로 document를 가지고 있는 것이지 document의 street로
+// ordering 한게 아니기 떄문이다.
+db.contacts.explain().find({"addresses.street":"Main Street"})
+
+// 이렇게 하면은 IXSCAN 이 된다는 것이다.
+db.contacts.explain().find({address:{street:"Main Street"}})
+
+// 이렇게 하면은 아까 했던 것을 IXSCAN으로 할 수 있다는거고
+// 이것 또한 multi-key index라는 것을 알아두면 된다.
+db.contacts.createIndex({"addresses.street":1})
+
+// 이런식으로 single-key와 multi-key를 합쳐서
+// compound index를 만들어도 상관없다.
+db.contacts.createIndex({name:1,addresses:1})
+
+// 하지만 이런식으로 multi-key + multi-key 는 
+// Error가 난다는 것 까지 알아두면 된다.
+db.contacts.createIndex({hobbies:1,addresses:1})
+
 
 
 
