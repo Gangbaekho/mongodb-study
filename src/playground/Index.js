@@ -30,3 +30,10 @@ db.contacts.explain().find({"dob.age":35})
 db.contacts.explain().find({gender:"male"})
 
 db.contacts.explain().find({"dob.age":35}).sort({gender:1})
+
+db.contact.findOne()
+
+// unique 를 이용해서 index를 생성 할 수 있다.
+// 하지만 동일한 값이 존재한다면은 이러할 경우 Error가
+// 난다는 것을 알면 된다.
+db.contacts.createIndex({email:1},{unique:true})
