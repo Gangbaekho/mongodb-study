@@ -100,7 +100,18 @@ db.customers.explain("executionStats").find({name:"Max"})
 // Index에서 cover 할 수 있기 떄문에 covered query라고 하는 것이다.
 db.customers.explain("executionStats").find({name:"Max"},{_id:0,name:1})
 
+// compound index를 만들떄는 순서가 중요하다는 것을 인지해야 한다.
+// 만약 name이 먼저 들어갔다고 하면, 위에서 만든 single index인
+// name으로 만든 index는 의미가 없다는 것이다. 이걸로 대체 할 수 있으니까.
+db.customers.createIndex({age:1,name:1})
 
+// 이러한 쿼리를 날릴떄, 위에서 적용한 Index를 이용해서
+// 찾을것은 맞는데, 여기서 이해해야 하는 것은 
+// Rejects a plan이다. find 조건에 name라는 것이 있으니까
+// 앞서 만든 single name index를 사용할 수 도 있는 것인데
+// 더 적절한 Index를 mongodb가 알아서 사용하기 때문에
+// 그 Index는 reject 되었다는 그런 얘기이다.
+db.customers.explain().find({name:"Max",age:30})
 
 
 
