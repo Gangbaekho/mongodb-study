@@ -147,6 +147,47 @@ db.contacts.createIndex({name:1,addresses:1})
 // Error가 난다는 것 까지 알아두면 된다.
 db.contacts.createIndex({hobbies:1,addresses:1})
 
+db.products.insertMany([{title:"A Book", description:"This is an awesome book about a young artist!"},{title:"Red T-Shirt",description:"This T-Shirt is red and it's pretty awesome!"}])
+
+// 보통은 -1 이나 1을 써가지고 order by 를 표현하지만,
+// text index에서는 그렇게 하면 안된다. text index를 쓸 것이라면 말이다.
+// text index는 text를 array 형태로 저장을 하게 되는데 is , a 와같은
+// 매우 평범한 것은 array에 저장하지 않는다. 왜냐면 그것을 기준으로
+// 찾을 일은 없다고 판단하기 때문이다. 즉, keyword 만 저장하게 된다.
+db.products.createIndex({description:"text"})
+
+// 보통은 text를 찾는다 하더라도 특정 field에 있는 
+// text를 찾는다고 생각하겠지만, 그렇지 않다 어짜피
+// text index는 하나 일 것이기 때문이다.
+// 대문자 소문자는 중요하지 않다 어짜피 Lowercase로 저장하기 때문.
+// 위에 insertMany를 기준으로 하면 두개가 검색 될 것이다.
+db.products.find({$text:{$search:"awesome"}}).pretty()
+
+// 이렇게 하면 키워드 두개 중 하나만 만족해도 나오기 때문에
+// 이것도 결국 두개가 나오게 된다.
+db.products.find({$text:{$search:"red book"}}).pretty()
+
+// 이렇게 하면은 red book 이라는 문장이 있는 것을 찾게 된다.
+// 즉, "을 추가 해줘야 하는데 javascript에서는 저렇게 처리해야 한다.
+db.products.find({$text:{$search:"\"red book\""}}).pretty()
+
+// 이것을 하면 두개의 document가 나온다.
+// 주목해야 할 것은 하나는 두개중 하나만 포함되어있고
+// 다른 하나는 두개다 포함되어있다. 이러한 상황에서
+// 제일 매칭이 잘되는 것은 두번째일 것이고 상황에따라
+// 매칭 포인트가 가장 높은 순으로 정렬하고 싶을 것이다.
+db.products.find({$test:{$search:"awesome t-shirt"}}).pretty()
+
+// 그럴때는 1차적으로 이렇게 projection을 통해서
+// score라는 field를 검색 결과에 포함시켜줘야 한다.
+// 그러면은 매칭된 keyword를 기준으로 점수가 포함된다.
+db.products.find({$text:{$search:"awesome t-shirt"}},{score:{$meta:"textScore"}}).pretty()
+
+// 이렇게 정렬을 해주면은 매칭이 잘된 document로 정렬 할 수 있다.
+db.products.find({$text:{$search:"awesome t-shirt"}},{score:{$meta:"textScore"}}).sort({score:{$meta:"textScore"}}).pretty()
+
+
+
 
 
 
