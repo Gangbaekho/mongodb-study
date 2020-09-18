@@ -222,3 +222,6 @@ db.products.dropIndex("title_text_description_text")
 // 그것이 weight라는 개념이다.
 db.products.createIndex({title:"text",description:"text"},{default_language:"english",weights:{title:1,description:10}})
 
+// 이렇게 두번쨰 인자로 저렇게 주면은 
+// background로 Index를 만든다는 것이다.
+db.products.createIndex({age:1},{background:true})
