@@ -52,3 +52,11 @@ db.areas.createIndex({area:"2dsphere"})
 // geoWithin은 특정 지역안에 있는 point들을 리턴하는 것이다. 
 // 차이점을 잘 알아두도록 한다.
 db.areas.find({area:{$geoIntersects:{$geometry:{type:"Point",coordinates:[-122.49089,37.76992]}}}})
+
+// 반경 몇 Radian 안에 있는 points 를 찾는 것이다.
+// centerSphere 의 첫번째에는 coordinates 두번째에는 radian이 들어가는데
+// 6387.1은 앞에 1 킬로미터를 radian으로 바꿔 주기 위한 수식일 뿐 중요한건 아니다.
+// mongo site에서 이 숫자는 찾아볼 수 있다. 결과는 두개가 나오네.
+// getWithin 대신에 near을 쓸 수 있다. sort된 결과를 얻고자 할때 그렇게 
+// 쓰면 좋다는 것이다.
+db.places.find({location:{$geoWithin:{$centerSphere:[[-122.46203,37.77286], 1 / 6387.1]}}})
