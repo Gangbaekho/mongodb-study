@@ -205,9 +205,12 @@ db.products.insertOne({titke:"A Ship",description:"Floats perfectly"})
 
 db.products.find({$text:{$search:"ship"}})
 
+// 이걸 하게 되면 두개의 document가 return 된다.
+// 근데 두개 중 t-shirt가 포함되어 있는 document 를 빼고 싶다고 한다면?
+db.products.find({$text:{$search:"awesome"}}).pretty()
+
+// 이렇게 포함되지 않아야 할 단어에 -를 붙인다음에
+// 해당하는 단어를 적어주면은 그것을 제외한단 그런 의미임.
+db.products.find({$text:{$search:"awesome -t-shirt"}}).pretty()
 
  
-
-
-
-
