@@ -8,3 +8,11 @@
 db.persons.aggregate([
     {$match:{gender:"male"}}
 ])
+
+// 남자 중에 location.state 를 기준으로 grouping 하고
+// totalPersons 이란 field에 총 사람 수를 표현 하라는 것임.
+// sql의 group by와 비슷한 개념이긴 하다
+db.persons.aggregate([
+    {$match:{gender:"male"}},
+    {$group:{_id:{state:"$location.state"},totalPersons:{$sum:1}}}
+])
