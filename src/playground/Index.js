@@ -186,9 +186,27 @@ db.products.find({$text:{$search:"awesome t-shirt"}},{score:{$meta:"textScore"}}
 // 이렇게 정렬을 해주면은 매칭이 잘된 document로 정렬 할 수 있다.
 db.products.find({$text:{$search:"awesome t-shirt"}},{score:{$meta:"textScore"}}).sort({score:{$meta:"textScore"}}).pretty()
 
+// 일단 이렇게 text index를 추가하려면
+// 에러가 난다. 기존에 있단 text index와 머지를
+// 시도하지만 실패한다는 뭐 그런 얘기임.
+db.products.createIndex({title:"text"})
+
+// 이렇게 일단은 기존에 있던 index를 지워준다.
+// 이름이 살짝 다를 수 있는데 getIndexes()를 이용해서
+// 인덱스 이름을 찾아주면 된다.
+db.products.dropIndex("description_text")
+
+// 이렇게 해주면은 하나의 text index가 title과 description의
+// 키워드를 모두 관리하게 된다는 그런 의미임.
+db.products.createIndex({title:"text",description:"text"})
+
+// 이걸 추가해서 실험해보자
+db.products.insertOne({titke:"A Ship",description:"Floats perfectly"})
+
+db.products.find({$text:{$search:"ship"}})
 
 
-
+ 
 
 
 
