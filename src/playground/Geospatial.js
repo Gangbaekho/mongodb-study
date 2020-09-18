@@ -41,3 +41,14 @@ const p4 = [-122.51088,37.77131]
 // 이렇게 해주면 결과값이 잘 나온다.
 // coordinages 에서 p1은 두번 나온다. end point를 알기 위해서임.
 db.places.find({location:{$geoWithin:{$geometry:{type:"Polygon",coordinates:[[p1,p2,p3,p4,p1]]}}}}).pretty()
+
+// 이제 유저가 특정 구역이 있는걸 확인하는것을 해보자
+// 일단 폴리곤을 등록해주자.
+db.areas.insertOne({name:"Golden Gate Part",area:{type:"Polygon",coordinates:[[p1,p2,p3,p4,p1]]}})
+
+db.areas.createIndex({area:"2dsphere"})
+
+// geoIntersects는 특정 point를 포함하고 있는 지역을 리턴하는거고
+// geoWithin은 특정 지역안에 있는 point들을 리턴하는 것이다. 
+// 차이점을 잘 알아두도록 한다.
+db.areas.find({area:{$geoIntersects:{$geometry:{type:"Point",coordinates:[-122.49089,37.76992]}}}})
