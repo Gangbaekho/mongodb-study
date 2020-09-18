@@ -25,3 +25,7 @@ db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[-122.47111
 // distance의 기준은 meter 이다.
 db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[-122.471114,37.771104]},$maxDistance:500, $minDistance:10}}})
 
+// 새로운 지역을 추가해주자.
+db.places.insertOne({name:"Conservatory of Flowers", location:{type:"Point",coordinates:[-122.4615748,37.7701756]}})
+db.places.insertOne({name:"Golden Gate Part Tennis Courts", location:{type:"Point",coordinates:[-122.593702,37.7705046]}})
+db.places.insertOne({name:"Nopa", location:{type:"Point",coordinates:[-122.4389058,37.7747415]}})
