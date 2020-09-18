@@ -29,3 +29,15 @@ db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[-122.47111
 db.places.insertOne({name:"Conservatory of Flowers", location:{type:"Point",coordinates:[-122.4615748,37.7701756]}})
 db.places.insertOne({name:"Golden Gate Part Tennis Courts", location:{type:"Point",coordinates:[-122.593702,37.7705046]}})
 db.places.insertOne({name:"Nopa", location:{type:"Point",coordinates:[-122.4389058,37.7747415]}})
+
+// 지금부터 해볼 것은 어떠한 지역(Polygon)안에 있는 Points들을 찾는 것이다.
+// 아래의 coordinates가 특정 Polygon을 형성한다고 생각하면 된다.
+// 우리가 추가했던 지역중 Nopa 뺴고는 모두 이 Polygon 안에 존재한다.
+const p1 = [-122.4547,37.77473]
+const p2 = [-122.45303,37.76641]
+const p3 = [-122.51026,37.76411]
+const p4 = [-122.51088,37.77131]
+
+// 이렇게 해주면 결과값이 잘 나온다.
+// coordinages 에서 p1은 두번 나온다. end point를 알기 위해서임.
+db.places.find({location:{$geoWithin:{$geometry:{type:"Polygon",coordinates:[[p1,p2,p3,p4,p1]]}}}}).pretty()
