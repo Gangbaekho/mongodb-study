@@ -213,4 +213,12 @@ db.products.find({$text:{$search:"awesome"}}).pretty()
 // 해당하는 단어를 적어주면은 그것을 제외한단 그런 의미임.
 db.products.find({$text:{$search:"awesome -t-shirt"}}).pretty()
 
- 
+// 일단 기존에 있는 index를 지워주자
+db.products.dropIndex("title_text_description_text")
+
+// 여기서 보는 것처럼 default_language를 변경 시킬 수 있다는 것이고
+// 아까 본 것 중에 매칭이 어느정도 되느냐에 따라서 점수를 매긴다고 했는데
+// 어떤 field에 더 비중을 둘 것인지 정할 수 있다는 것이다.
+// 그것이 weight라는 개념이다.
+db.products.createIndex({title:"text",description:"text"},{default_language:"english",weights:{title:1,description:10}})
+
