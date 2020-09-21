@@ -21,3 +21,8 @@ db.companies.insertOne({valuation:5000000000})
 // 이렇게 Long으로 바꿔주는것이 바람직 하지 않을까
 // 아무튼 range를 적당히 알아두고 타입을 정하는게 좋다는 것이다.
 db.companies.insertOne({valuation:NumberLong("5000000000")})
+
+// NumberDecimal을 사용하지 않으면 딱 0.2가 나오지 않는데,
+// 이걸 사용하면은 소수점 34 자리까지 명확하게 계산 할 수 있다는 것이다.
+db.science.insertOne({a:NumberDecimal("0.3"),b:NumberDecimal("0.1")})
+db.science.aggregate([{$project:{result:{$subtract:["$a","$b"]}}}])
