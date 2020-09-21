@@ -75,3 +75,12 @@ db.persons.aggregate([
     },
     {$group : {_id:{birthYear:{$isoWeekYear:"$birthdate"}},numPersons:{$sum:1}}}
 ])
+
+// group이라는 것 자체가 n:1 즉,
+// 여러개의 document가 하나의 document가 되는 것을 의미하니까..
+// 각각 document에 있는 array를 하나의 array로 표현 해야 할 떄가 있을 것이다.
+// 일단 이렇게 되면은 합쳐지긴 하는데, [[],[]] 이런식으로
+// array안에 array가 생성된다는게 문제, ["","","",""] 이렇게 하고 싶은데 말이다.
+db.friends.aggregate([
+    {$group : {_id:{age:"$age"}, allhobbies:{$push:"$hobbies"}}}
+])
