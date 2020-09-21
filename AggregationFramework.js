@@ -58,6 +58,11 @@ db.persons.aggregate([
     ]}}}
 ])
 
+// 이것 또한 마찬가지로 date 데이터를 특정 년도로 바꿔서 
+// 그룹핑 하는 거에 지나지 않는다
+// $isoWeekYear 만 챙겨가면 된다
+// 그리고 또 하나, projection 된거 가지고
+// group을 지을 수 있다는 것을 이해하면 된다.
 db.persons.aggregate([
     {$project : 
         {
@@ -67,5 +72,6 @@ db.persons.aggregate([
             birthdate:{$toDate:"$dob.date"},
             age : "$dob.age"
         }
-    }
+    },
+    {$group : {_id:{birthYear:{$isoWeekYear:"$birthdate"}},numPersons:{$sum:1}}}
 ])
