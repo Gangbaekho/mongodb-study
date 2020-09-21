@@ -181,7 +181,7 @@ db.persons.aggregate([
 // 이때 buckets 에다가 원하는 bucket 수를 집어넣으면
 // 알아서 적절히 boundaries를 설정해 준다는 그런 얘기다.
 // 그러면은 document의 갯수를 거의 동일하게 유지 시켜주는
-// boudaries를 생성해서 return 해준다는 얘기임.
+// boudaries를 생성해서 return 해준다는 얘기임. 
 db.persons.aggregate([
     {
         $bucketAuto:{
@@ -194,4 +194,22 @@ db.persons.aggregate([
             }
         }
     }
+])
+
+// 이제는 aggregate pipe 를 타고 온 result를
+// 특정 collection에 write 하는 방법에 대해서 알아보자.
+// $out 이라는 step을 만들어 주고 collectionName을 적어주면 된다.
+db.persons.aggregate([
+    {
+        $bucketAuto:{
+            groupBy:"$dob.age",
+            buckets:5,
+            output:{
+                numPersons:{$sum:1},
+                averageAgae:{$avg:"$dob.age"},
+                names:{$push:"$name.first"}
+            }
+        }
+    },
+    {$out:"collectionName"}
 ])
