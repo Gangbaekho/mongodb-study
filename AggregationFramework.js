@@ -158,3 +158,40 @@ db.friends.aggregate([
         examScores:{$filter : {input : "$examScores", as:"sc",cond:{$gt:["$$sc.score",60]}}}
     }}
 ])
+
+// bucket 이란 것은 group 이랑 되게 비슷한 느낌인데,
+// 특징은 boundaries가 있다는 것이다. 밑에 예를 들면
+// 0~18 18~30 30~50 50~80 80~120 이렇게 age를 구분한다는 것이기 때문에
+// 단순한 group이랑은 다르다는 것이다. group은 일치 하는 것끼리 묶기 떄문.
+db.persons.aggregate([
+    {
+        $bucket:{
+            groupBy:'$dob.age',
+            boundaries:[0,18,30,50,80,120],
+            output:{
+                numPersons:{$sum:1},
+                averageAgae:{$avg:"$dob.age"},
+                names:{$push:"$name.first"}
+            }
+        }
+    }
+])
+
+// 이렇게 bucketAuto를 이용할 수 있는데,
+// 이때 buckets 에다가 원하는 bucket 수를 집어넣으면
+// 알아서 적절히 boundaries를 설정해 준다는 그런 얘기다.
+// 그러면은 document의 갯수를 거의 동일하게 유지 시켜주는
+// boudaries를 생성해서 return 해준다는 얘기임.
+db.persons.aggregate([
+    {
+        $bucketAuto:{
+            groupBy:"$dob.age",
+            buckets:5,
+            output:{
+                numPersons:{$sum:1},
+                averageAgae:{$avg:"$dob.age"},
+                names:{$push:"$name.first"}
+            }
+        }
+    }
+])
