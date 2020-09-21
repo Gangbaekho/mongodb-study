@@ -64,12 +64,7 @@ db.persons.aggregate([
             _id:0, 
             name :1, 
             email:1, 
-            birthdate:{
-                $convert : {
-                    input : "$dob.date", 
-                    to:"date"
-                }
-            },
+            birthdate:{$toDate:"$dob.date"},
             age : "$dob.age"
         }
     }
