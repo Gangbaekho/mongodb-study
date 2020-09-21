@@ -51,8 +51,26 @@ db.persons.aggregate([
 // 신기한것은 type : Point라고 되어 있는데 이렇게 하드 코딩으로
 // 원하는 것을 써주면은 그게 나타난다라는 것이다(숫자대신에)
 // 그리고 convert라는 것을 사용해 줬다는 것 정도 생각해주면 된다.
+// Error가 날시, Null 일시를 대비하여 처리 해줬다는 것도 볼만한 사항이다
 db.persons.aggregate([
     {$project:{_id:0,name:1, email:1,location:{ type : "Point", coordinates:[
         {$convert:{ input:"$location.coordinates.longitude", to:"double", onError:0.0, onNull:0.0}},{$convert:{ input:"$location.coordinates.latitude", to:"double", onError:0.0, onNull:0.0}}
     ]}}}
+])
+
+db.persons.aggregate([
+    {$project : 
+        {
+            _id:0, 
+            name :1, 
+            email:1, 
+            birthdate:{
+                $convert : {
+                    input : "$dob.date", 
+                    to:"date"
+                }
+            },
+            age : "$dob.age"
+        }
+    }
 ])
