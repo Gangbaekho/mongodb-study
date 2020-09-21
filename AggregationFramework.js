@@ -138,3 +138,23 @@ db.friends.aggregate([
         examScore:{$slice:["$examScores",2,1]}
     }}
 ])
+
+
+// size operator에 관한 것임..
+db.friends.aggregate([
+    {$project:{
+        _id:0,
+        numScores:{$size:"$examScores"}
+    }}
+])
+
+// filter에 관한 내용인데 javascript의 filter랑 내용이 비슷함.
+// input에다가 array를 넣어주고 as는 하나의 item이 되는 거니까
+// 아무 이름으로 해도 된다는 것이다. cond는 condition의 약자이고
+// 그 값이 true가 되는 것만 살아남는 식이다.
+db.friends.aggregate([
+    {$project:{
+        _id:0,
+        examScores:{$filter : {input : "$examScores", as:"sc",cond:{$gt:["$$sc.score",60]}}}
+    }}
+])
