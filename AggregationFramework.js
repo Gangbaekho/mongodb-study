@@ -84,3 +84,23 @@ db.persons.aggregate([
 db.friends.aggregate([
     {$group : {_id:{age:"$age"}, allhobbies:{$push:"$hobbies"}}}
 ])
+
+// 이렇게 unwind만 따로 해서 실험을 해보면은 결과는 참 희한한데,
+// 일단은 unwind라는 것은 array의 field에 적용 할 수 있다는 것을 알아두고,
+// Max라는 애는 hobbies가 두개이다.
+// 결과는 hobbies[0] 의 것과 나머지는 그대로, hobbies[1] 의 것과 나머지는 그대로
+// 이렇게 Max의 document가 두개로 분리 된다는 것이다. 엄청나게 중복된 데이터가
+// 생기게 되는것이지.
+db.friends.aggregate([
+    {$unwind:"$hobbies"}
+])
+
+// 그러니까 이렇게 했을때 위에서 직면한 문제를
+// 해결 할 수 있는 역할을 할 수 있다는 건데
+// 너무 데이터 중복되게 하는거 아닌가 싶다.
+// 근데 이렇게 되면은 hobbies 안에 중복된 value가 생긴다는
+// 문제점이 발생하게 된다.
+db.friends.aggregate([
+    {$unwind:"$hobbies"},
+    {$group : {_id:{age:"$age"}, allhobbies:{$push:"$hobbies"}}}
+])
