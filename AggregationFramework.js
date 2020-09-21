@@ -104,3 +104,37 @@ db.friends.aggregate([
     {$unwind:"$hobbies"},
     {$group : {_id:{age:"$age"}, allhobbies:{$push:"$hobbies"}}}
 ])
+
+
+// 중복되는게 걱정이라면 그냥 아래와 같이
+// addToSet을 써주면 끝.
+db.friends.aggregate([
+    {$unwind:"$hobbies"},
+    {$group : {_id:{age:"$age"}, allhobbies:{$addToSet:"$hobbies"}}}
+])
+
+// friends에는 exameScores가 있는데 [{},{}] 이런 모양임.
+// $slice의 첫번째는 array를 집어넣으면 되고, 두번째는
+// 시작점 부터 몇개의 요소를 가져올 것인지를 의미한다.
+db.friends.aggregate([
+    {$project:{
+        _id:0,
+        examScore:{$slice:["$examScores",1]}
+    }}
+])
+
+// 이렇게 하면 뒤에서 한개를 의미한다.
+db.friends.aggregate([
+    {$project:{
+        _id:0,
+        examScore:{$slice:["$examScores",-1]}
+    }}
+])
+
+// index 2에서 부터 1개를 가져오라는 말임.
+db.friends.aggregate([
+    {$project:{
+        _id:0,
+        examScore:{$slice:["$examScores",2,1]}
+    }}
+])
