@@ -44,3 +44,15 @@ db.persons.aggregate([
     {$project:{_id:0,gender:1, fullName:{$concat:[{$toUpper:"$name.first"}," ",{$toUpper:"$name.last"}]}}}
 ])
 
+
+// person에 기본적으로 들어 있는 location은 GeoJSON 형태에
+// 맞춰져 있지 않은 상태이다. 그러니까 이것을 project를 통해서
+// geojson 형태로 맞추는 것이 이 쿼리의 목적이라고 생각하면 된다.
+// 신기한것은 type : Point라고 되어 있는데 이렇게 하드 코딩으로
+// 원하는 것을 써주면은 그게 나타난다라는 것이다(숫자대신에)
+// 그리고 convert라는 것을 사용해 줬다는 것 정도 생각해주면 된다.
+db.persons.aggregate([
+    {$project:{_id:0,name:1, email:1,location:{ type : "Point", coordinates:[
+        {$convert:{ input:"$location.coordinates.longitude", to:"double", onError:0.0, onNull:0.0}},{$convert:{ input:"$location.coordinates.latitude", to:"double", onError:0.0, onNull:0.0}}
+    ]}}}
+])
